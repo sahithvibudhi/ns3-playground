@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML 5 Boilerplate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/base.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" integrity="sha512-6ts6Fu561/yzWvD6uwQp3XVYwiWNpWnZ0hdeQrETqtnQiGjTfOS06W76aUDnq51hl1SxXtJaqy7IsZ3oP/uZEg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </head>
+  <body>
+    <div class="bg-slate-50 flex items-stretch bg-grey-lighter min-h-screen">
+        <div class="fixed top-0 left-0 right-0 p-2 font-bold text-pink-600 text-center">
+            NS3 Playground
+        </div>
+        <div class="grid grid-cols-2 gap-2 mt-9 flex-1">
+            <div id="editor"></div>
+            <div>
+                <div>
+                    <button id="run-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        Run
+                    </button>
+
+                    <button id="download-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        Download
+                    </button>
+
+                    <pre id="output">
+
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+	<script src="/js/home.js"></script>
+  </body>
+</html>
