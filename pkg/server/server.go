@@ -39,13 +39,13 @@ func RandStringRunes(n int) string {
 }
 
 func execCommand(l string) string {
-	cmd := exec.Command("/bin/sh", "-c", "sudo "+l)
+	output, err := exec.Command("/bin/sh", "-c", "sudo "+l).Output()
 
 	var out bytes.Buffer
 	var stderr bytes.Buffer
 	cmd.Stdout = &out
 	cmd.Stderr = &stderr
-
+	logger.Logger.Println(stderr.String())
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println(fmt.Sprint(err) + ": " + stderr.String())

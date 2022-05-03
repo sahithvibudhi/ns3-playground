@@ -17,22 +17,30 @@
         <div class="grid grid-cols-2 gap-2 mt-9 flex-1">
             <div id="editor"></div>
             <div>
-                <div>
-                    <button id="run-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                        Run
-                    </button>
+                <div class="mt-3">
+                    <div class="text-right mr-4">
+                        <button id="run-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Run
+                        </button>
 
-                    <button id="download-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                        Download
-                    </button>
-
-                    <pre id="output">
+                        <button id="download-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Download
+                        </button>
+                    </div>
+                    <div>
+                        <div class="text-pink-600 mb-3">Examples: </div>
+                        <span id="first-template" class="p-2 shadow-md rounded-md hover:cursor-pointer">first.cc</span>
+                        <span id="second-template" class="p-2 shadow-md rounded-md hover:cursor-pointer">second.cc</span>
+                        <span id="third-template" class="p-2 shadow-md rounded-md hover:cursor-pointer">third.cc</span>
+                    </div>
+                    <pre id="output" class="mt-2 m-1">
 
                     </pre>
                 </div>
             </div>
         </div>
     </div>
+	<script src="/js/templates.js"></script>
 	<script src="/js/home.js"></script>
   </body>
 </html>
