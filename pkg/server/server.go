@@ -39,7 +39,7 @@ func RandStringRunes(n int) string {
 }
 
 func execCommand(l string) string {
-	output, err := exec.Command("/bin/sh", "-c", "sudo "+l).Output()
+	cmd := exec.Command("/bin/sh", "-c", "sudo "+l)
 
 	var out bytes.Buffer
 	var stderr bytes.Buffer
