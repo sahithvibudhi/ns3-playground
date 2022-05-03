@@ -103,9 +103,16 @@ func Start() {
 		logger.Logger.Println("creating docker container")
 		output += execCommand(fmt.Sprintf("docker run -t -d --name ns3-%s ns3", token))
 
+		_, b, _, _ := runtime.Caller(0)
+
+		// Root folder of this project
+		code := filepath.Join(filepath.Dir(b), "../..", "uploads/"+token+"/code")
+		// Root folder of this project
+		requestRoot := filepath.Join(filepath.Dir(b), "../..", "uploads/"+token)
+
 		// copy the code to docker container
 		logger.Logger.Println("copying files to the docker container")
-		output += execCommand(fmt.Sprintf("docker cp ${PWD}/uploads/%s/code ns3-%s:/usr/ns-allinone-3.30.1/ns-3.30.1/scratch/file.cc", token, token))
+		output += execCommand(fmt.Sprintf("docker cp %s ns3-%s:/usr/ns-allinone-3.30.1/ns-3.30.1/scratch/file.cc", code, token))
 
 		// compile the cpp using ./waf in ns3
 		logger.Logger.Println("./waf configuring")
@@ -124,7 +131,7 @@ func Start() {
 
 		// copy the pcap files back to the host
 		logger.Logger.Println("copy output to the host")
-		output += execCommand(fmt.Sprintf("docker cp ns3-%s:/output/. ${PWD}/uploads/%s/.", token, token))
+		output += execCommand(fmt.Sprintf("docker cp ns3-%s:/output/. %s.", token, requestRoot))
 
 		logger.Logger.Println("Stoping the docker container")
 		execCommand(fmt.Sprintf("docker stop ns3-%s", token))
@@ -132,7 +139,7 @@ func Start() {
 		logger.Logger.Println("removing the stray docker container")
 		execCommand(fmt.Sprintf("docker rm ns3-%s", token))
 
-		fmt.Sprintf("sending response %s", token)
+		logger.Logger.Println(fmt.Sprintf("sending response %s", token))
 		json.NewEncoder(w).Encode(map[string]string{"token": token, "output": output})
 	})
 
