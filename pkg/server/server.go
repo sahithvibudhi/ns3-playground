@@ -45,7 +45,7 @@ func execCommand(l string) string {
 	var stderr bytes.Buffer
 	cmd.Stdout = &out
 	cmd.Stderr = &stderr
-	logger.Logger.Println(stderr.String())
+
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
@@ -123,7 +123,16 @@ func Start() {
 
 		// run the compiled file
 		logger.Logger.Println("running the ns3 build")
-		output += execCommand(fmt.Sprintf("docker exec ns3-%s sh -c \"cd /usr/ns-allinone-3.30.1/ns-3.30.1/ && ./waf --run file\"", token))
+		execCommand(fmt.Sprintf("docker exec ns3-%s sh -c \"cd /usr/ns-allinone-3.30.1/ns-3.30.1/ && ./waf --run file > log.out 2>&1\"", token))
+
+		execCommand(fmt.Sprintf("docker cp ns3-%s:/usr/ns-allinone-3.30.1/ns-3.30.1/log.out %s", token, requestRoot))
+
+		ob, err := ioutil.ReadFile(fmt.Sprintf("%s/log.out", requestRoot))
+		if err != nil {
+			logger.Logger.Println(fmt.Sprint(err))
+			output += "\n>>> Could not capture program output\n"
+		}
+		output += string(ob)
 
 		// copy pcap to output dir
 		logger.Logger.Println("copy output to output directory")
