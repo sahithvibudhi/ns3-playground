@@ -98,6 +98,8 @@ func Start() {
 		output += execCommand(fmt.Sprintf("docker cp ${PWD}/uploads/%s/code ns3-%s:/usr/ns-allinone-3.30.1/ns-3.30.1/scratch/file.cc", token, token))
 
 		// compile the cpp using ./waf in ns3
+		output += execCommand(fmt.Sprintf("docker exec ns3-%s sh -c \"cd /usr/ns-allinone-3.30.1/ns-3.30.1/ && ./waf configure\"", token))
+
 		output += execCommand(fmt.Sprintf("docker exec ns3-%s sh -c \"cd /usr/ns-allinone-3.30.1/ns-3.30.1/ && ./waf\"", token))
 
 		// run the compiled file
@@ -111,7 +113,7 @@ func Start() {
 
 		execCommand(fmt.Sprintf("docker stop ns3-%s", token))
 
-		execCommand(fmt.Sprintf("dcoker rm ns3-%s", token))
+		execCommand(fmt.Sprintf("docker rm ns3-%s", token))
 
 		// count pcap files
 		files, _ := ioutil.ReadDir(fmt.Sprintf("uploads/%s/", token))
