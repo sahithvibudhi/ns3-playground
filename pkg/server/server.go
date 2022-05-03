@@ -57,8 +57,15 @@ func execCommand(l string) string {
 }
 
 func saveCode(token, code string) {
-	os.MkdirAll("uploads/"+token, 0755)
-	f, err := os.Create("uploads/" + token + "/code")
+	_, b, _, _ := runtime.Caller(0)
+
+	// Root folder of this project
+	root := filepath.Join(filepath.Dir(b), "../..", "uploads/"+token)
+	os.MkdirAll(root, 0755)
+
+	// Root folder of this project
+	root = filepath.Join(filepath.Dir(b), "../..", "uploads/"+token+"/code")
+	f, err := os.Create(root)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -91,6 +98,7 @@ func Start() {
 
 		// save code to a file in uploads
 		saveCode(token, t.Code)
+		logger.Logger.Println(fmt.Sprintf("Running ns3 for %s", token))
 
 		// run the code in a docker container
 		logger.Logger.Println("creating docker container")
@@ -142,10 +150,17 @@ func Start() {
 		buf := new(bytes.Buffer)
 		writer := zip.NewWriter(buf)
 
-		files, _ := ioutil.ReadDir(fmt.Sprintf("uploads/%s/", token))
+		_, b, _, _ := runtime.Caller(0)
+
+		// Root folder of this project
+		root := filepath.Join(filepath.Dir(b), "../..", fmt.Sprintf("uploads/%s/", token))
+		files, _ := ioutil.ReadDir(root)
 		for _, file := range files {
 			filename := file.Name()
-			data, err := ioutil.ReadFile(fmt.Sprintf("uploads/%s/%s", token, filename))
+
+			// Root folder of this project
+			filePath := filepath.Join(filepath.Dir(b), "../..", fmt.Sprintf("uploads/%s/%s", token, filename))
+			data, err := ioutil.ReadFile(filePath)
 			if err != nil {
 				log.Fatal(err)
 			}
