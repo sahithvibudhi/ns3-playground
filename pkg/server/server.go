@@ -184,8 +184,8 @@ func Start() {
 	srv := &http.Server{
 		Handler:      router,
 		Addr:         config.Config.Server.Port,
-		WriteTimeout: 30 * time.Second,
-		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 600 * time.Second,
+		ReadTimeout:  600 * time.Second,
 	}
 
 	logger.Logger.Println("Starting server")
