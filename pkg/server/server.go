@@ -133,22 +133,8 @@ func Start() {
 		logger.Logger.Println("removing the stray docker container")
 		execCommand(fmt.Sprintf("docker rm ns3-%s", token))
 
-		// count pcap files
-		_, b, _, _ := runtime.Caller(0)
-
-		// Root folder of this project
-		root := filepath.Join(filepath.Dir(b), "../..", fmt.Sprintf("uploads/%s/", token))
-		files, _ := ioutil.ReadDir(root)
-		count := 0
-		logger.Logger.Println("counting files")
-		for _, file := range files {
-			if strings.HasSuffix(file.Name(), ".pcap") {
-				count++
-			}
-		}
-
 		fmt.Sprintf("sending response %s", token)
-		json.NewEncoder(w).Encode(map[string]string{"token": token, "pcapCount": fmt.Sprint(count), "output": output})
+		json.NewEncoder(w).Encode(map[string]string{"token": token, "output": output})
 	})
 
 	router.HandleFunc("/download", func(w http.ResponseWriter, r *http.Request) {
