@@ -18,6 +18,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/sahithvibudhi/ns3-playground/config"
+	"github.com/sahithvibudhi/ns3-playground/pkg/logger"
 )
 
 type WafRequestBody struct {
@@ -93,27 +94,36 @@ func Start() {
 
 		// run the code in a docker container
 		output += execCommand(fmt.Sprintf("docker run -t -d --name ns3-%s ns3", token))
+		logger.Logger.Println("creating docker container")
 
 		// copy the code to docker container
 		output += execCommand(fmt.Sprintf("docker cp ${PWD}/uploads/%s/code ns3-%s:/usr/ns-allinone-3.30.1/ns-3.30.1/scratch/file.cc", token, token))
+		logger.Logger.Println("copying files to the docker container")
 
 		// compile the cpp using ./waf in ns3
 		output += execCommand(fmt.Sprintf("docker exec ns3-%s sh -c \"cd /usr/ns-allinone-3.30.1/ns-3.30.1/ && ./waf configure\"", token))
+		logger.Logger.Println("./waf configuring")
 
 		output += execCommand(fmt.Sprintf("docker exec ns3-%s sh -c \"cd /usr/ns-allinone-3.30.1/ns-3.30.1/ && ./waf\"", token))
+		logger.Logger.Println("compiling the copied code")
 
 		// run the compiled file
 		output += execCommand(fmt.Sprintf("docker exec ns3-%s sh -c \"cd /usr/ns-allinone-3.30.1/ns-3.30.1/ && ./waf --run file\"", token))
+		logger.Logger.Println("running the ns3 build")
 
 		// copy pcap to output dir
 		output += execCommand(fmt.Sprintf("docker exec ns3-%s bash -c \"mkdir -p /output; cp -f /usr/ns-allinone-3.30.1/ns-3.30.1/*.pcap /output\"", token))
+		logger.Logger.Println("copy output to output directory")
 
 		// copy the pcap files back to the host
 		output += execCommand(fmt.Sprintf("docker cp ns3-%s:/output/. ${PWD}/uploads/%s/.", token, token))
+		logger.Logger.Println("copy output to the host")
 
 		execCommand(fmt.Sprintf("docker stop ns3-%s", token))
+		logger.Logger.Println("Stoping the docker container")
 
 		execCommand(fmt.Sprintf("docker rm ns3-%s", token))
+		logger.Logger.Println("removing the stray docker container")
 
 		// count pcap files
 		files, _ := ioutil.ReadDir(fmt.Sprintf("uploads/%s/", token))
@@ -172,5 +182,6 @@ func Start() {
 		ReadTimeout:  30 * time.Second,
 	}
 
+	logger.Logger.Println("Starting server")
 	log.Fatal(srv.ListenAndServe())
 }

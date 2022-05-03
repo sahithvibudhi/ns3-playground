@@ -1,2 +1,4 @@
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
+github.com/regorov/logwriter v0.0.0-20171127083154-22424588c902 h1:8AelKTLVnDZCceoQzJPBB5ey3lqZmzNENMBbHzSijic=
+github.com/regorov/logwriter v0.0.0-20171127083154-22424588c902/go.mod h1:wobiZIANTSu/keB0sjaI++PBX6lcXshDUwIzYimKf0Y=
