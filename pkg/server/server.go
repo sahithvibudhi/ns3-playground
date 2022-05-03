@@ -11,6 +11,8 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -155,7 +157,11 @@ func Start() {
 		w.Write(buf.Bytes())
 	})
 
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
+	_, b, _, _ := runtime.Caller(0)
+
+	// Root folder of this project
+	root := filepath.Join(filepath.Dir(b), "../..", "./static/")
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir(root)))
 
 	srv := &http.Server{
 		Handler:      router,
